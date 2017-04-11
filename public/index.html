@@ -1,0 +1,165 @@
+<!doctype html>
+<!--
+  Material Design Lite
+  Copyright 2015 Google Inc. All rights reserved.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License
+-->
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="A portfolio template that uses Material Design Lite.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <title>Cesare Vinciguerra Blog</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.deep_orange-amber.min.css" />
+
+    <link rel="stylesheet" href="/public/styles.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">˙
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+</head>
+
+<body>
+    <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+        <header class="mdl-layout__header mdl-layout__header--waterfall portfolio-header">
+            <div class="mdl-layout__header-row portfolio-logo-row">
+                <span class="mdl-layout__title">
+                    <div class="portfolio-logo"></div>
+                    <span class="mdl-layout__title">Cesare Vinciguerra Blog</span>
+                </span>
+            </div>
+            <div class="mdl-layout__header-row portfolio-navigation-row mdl-layout--large-screen-only">
+                <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
+
+                    <a class="mdl-navigation__link is-active" href="Dummy">DUMMY</a>
+
+                </nav>
+            </div>
+        </header>
+        <div class="mdl-layout__drawer mdl-layout--small-screen-only">
+            <nav class="mdl-navigation mdl-typography--body-1-force-preferred-font">
+
+                <a class="mdl-navigation__link" href="dummy">dummy</a>
+
+            </nav>
+        </div>
+
+        <main class="mdl-layout__content">
+            <div class="mdl-grid portfolio-max-width">
+
+                <div class="mdl-cell mdl-cell mdl-cell--12-col mdl-card mdl-shadow--4dp portfolio-card">
+                    <div class="mdl-card__media">
+                        <!--    <img class="article-image" src="public/images/linuxaudio.jpg" border="0" alt=""> -->
+                    </div>
+                    <div class="mdl-card__title">
+                        <h2 class="mdl-card__title-text"></h2>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        <h3 class='mdl-cell mdl-cell--12-col mdl-typography--headline'>Introduction</h3>
+                        <div class="mdl-cell mdl-cell--12-col">
+                            Come primo articolo per questo blog ho deciso di condividere il blog stesso, un progetto veloce e semplice db-less ma con tutte le carte in regola. Database e DMBS sono elementi importantissimi di una infrastruttura IT ma come sempre tutto dipende dal contesto…. Perchè dovrei scomodare un server db per un blog che all’ottimo ospiterà 50 articoli ? Il nostro “db” infatti sarà un json, statico, semplice un pò in stile hugo o Jekyll :-) L’obiettivo che ci prefiggiamo con questo progetto è quello di tirar su un mini blog (hand made) con una sezione di editing per i nostri articoli. Gli strumenti che ci servono sono:</br>
+                            <ul>
+                                <li>
+                                    <h5>Backend</h5> Node.js Express ( bodyparser , multer , ejs ) , JSON web token ( jwt ) </br>
+                                </li>
+                                <li>
+                                    <h5>FrontEnd</h5> HTML,CSS, js , jquery, ejs.</br>
+                                </li>
+                            </ul>
+                            <div class="mdl-grid mdl-cell mdl-cell--12-col">
+                            <h5>Backend</h5> Vabbene node è node ;-) express è uno stack per sviluppare backend con node , bodyparser è un middleware per express che parsa il corpo delle richieste http ed aggiunge agli oggetti req di un handler una proprietà body contenente il json, multer è un middleware per express che ci permette di uploadare files ed ejs è il nostro view engine. Mi piace ejs rispetto ad altre alternative, jade per citarne uno perchè renderizza html e non un’altro meta-linguaggio di markup ( da imparare ). JWT ci serve per la generazione e interpretazione dei token di autenticazione, lo useremo per la sezione di edit/add dei nostri articoli, in questo progetto gestiamo un’autenticazione rudimentale ma moderna…. comunque sia semplice da capire ed implementare. Il backend è completamente implementato in server.js che all’avvio carica i nostri dati dal db ( 2 file json )
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <pre><code class='js'>//load JSON data (articles , user and private key)
+                                    var articles = JSON.parse(fs.readFileSync('db/articles.json', 'utf8'));
+                                    var user = JSON.parse(fs.readFileSync('db/user.json', 'utf8'));
+                                    var key = JSON.parse(fs.readFileSync('configs/secret_key.json', 'utf8'));
+                                </code></pre>
+                            </div>
+                            inizializza multer ,
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <pre><code class='js'>
+                                    //configure multer storage
+                                    var storage = multer.diskStorage({
+                                        destination: function (req, file, cb) {
+                                            cb(null, 'public/images');
+                                        },
+                                        filename: function (req, file, cb) {
+                                            cb(null, file.originalname);
+                                        }
+                                    })
+                                    //bodyParser as middleware
+                                    app.use(bodyParser.json());
+                                    var upload = multer({ storage: storage });
+                                </code></pre>
+                            </div>
+                            configura bodyparser come middlware ,
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <pre><code class='js'>
+
+                                //bodyParser as middleware
+                                app.use(bodyParser.json());
+
+                                </code></pre> registra la parte di risorse “statiche” ( public, images , js ecc ) configura bodyparser come middlware ,
+                            </div>
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <pre><code class='js'>
+
+                                //map static resources
+                                app.use('/public', express.static(__dirname + '/public'));
+                                app.use('/images', express.static(__dirname + '/public/images'));
+                                app.use('/js', express.static(__dirname + '/public/js'));
+
+                                </code></pre> ejs come view engine
+                            </div>
+                            <div class="mdl-cell mdl-cell--12-col">
+                                <pre><code class='js'>
+                                // set the view engine to ejs
+                                app.set('view engine', 'ejs');
+                                </code></pre> e setta gli handler per i nostri endpoint http.... Stop!.
+                            </div>
+                            <h5>Frontend</h5> 
+                            Il frontend è rappresentato dai nostri file ejs , quindi 2 rudimenti di come funziona il templating in ejs, come framework per il design della pagina ho usato google mdl, ma liberissimi di usare qualunque cosa preferiate, un pò di jquery per l’interazione con il dom.
+                            Anche qui liberissimi di utilizzare qualsiasi cosa vogliate, il post vuole solo essere un esempio di quanto può essere veloce un progetto del genere.
+                            Vediamo nel dettaglio la struttura: il blog ha 2 voci di menu, Blog e About, rappresentate rispettivamente dalle view index.ejs e about.ejs , ogni articolo della lista di index.ejs può essere espanso e letto per intero , quello di cui si occupa article.ejs.
+                            Poiché le nostre pages cambiano solo per il layout del contenuto ( sempre google mdl usiamo , sempre jquery ecc )  le varie pages condividono delle porzioni di “html” ( più generale markup ) : head, header e footer , le nostre partials views.
+                            In head troviamo titolo meta-tag e stylesheet , in header la parte di menù e navigation bar ( sempre mdl ) , in footer due link ai social e copiright.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mdl-card__actions">
+                        <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored" href="article/<%= article.id %>">Read more</a>
+                    </div>
+                </div>
+
+            </div>
+            <footer class="mdl-mini-footer">
+                <div class="mdl-mini-footer__left-section">
+                    <div class="mdl-logo">Cesare Vinciguerra blog</div>
+                </div>
+                <div class="mdl-mini-footer__right-section">
+                    <div>Icons made by <a href="http://www.flaticon.com/authors/prosymbols" title="Prosymbols">Prosymbols</a>                        from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/"
+                            title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+                </div>
+            </footer>
+        </main>
+    </div>
+    <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js"></script>
+</body>
+
+</html>

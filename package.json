@@ -1,0 +1,26 @@
+{
+  "name": "cesaresblog",
+  "version": "1.0.0",
+  "description": "blog",
+  "main": "server.js",
+  "dependencies": {
+    "body-parser": "^1.17.1",
+    "ejs": "^2.5.6",
+    "express": "^4.15.2",
+    "jsonwebtoken": "^7.3.0",
+    "multer": "^1.3.0"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-preset-es2015": "^6.24.0"
+  },
+  "scripts": {
+    "dev": "lite-server -c configs/bs-config.json",
+    "build": "babel out -d lib"
+  },
+  "keywords": [
+    "blog"
+  ],
+  "author": "Cesare Vinciguerra",
+  "license": "ISC"
+}
