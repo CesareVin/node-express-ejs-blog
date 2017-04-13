@@ -87,10 +87,10 @@ app.post('/article', function (req, res) {
                     var isFound = false;
                     var i = 0;
                     while (!isFound && !exit) {
-                        if (tmp.id == articles[i].id)
-                            isFound = true;
-                        if (articles.length == i-1)
+                        if (articles.length == i)
                             exit = true;
+                        else  if (tmp.id == articles[i].id)
+                            isFound = true;
                         i++;
                     }
                     if (!isFound) {
@@ -196,5 +196,5 @@ if (debug) {
     });
 }
 
-app.listen(8080);
+app.listen(80);
 console.log('[INFO] Blog server is running on port 80');
